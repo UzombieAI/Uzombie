@@ -1,0 +1,56 @@
+# Uzombie v1 — The fastest single-GPU LLM fine-tuning engine
+
+Hybrid research stack (GaLore grad projection + LoRA-FA activation caching + Universal Subspaces + DoRA) on top of Unsloth fused kernels, with exact-time scheduling, zero-config CLI, and safe Hugging Face uploads.
+
+## Install
+```bash
+pip install -e .
+```
+Requires Python 3.10+, CUDA 12.4 wheels (see `requirements.txt`).
+
+## Quickstart
+```bash
+python -m uzombie \
+  --model unsloth/tinyllama-chat-bnb-4bit \
+  --dataset yahma/alpaca-cleaned \
+  --time 10m \
+  --goal balanced \
+  --style sft
+```
+
+## Key features
+- Unsloth fused kernels (4-bit, Flash/xFormers) for 3.5–4× over vanilla HF.
+- Hybrid projector: GaLore (arXiv:2403.03507), LoRA-FA (arXiv:2305.14314), Universal Subspaces (arXiv:2512.05117), DoRA (arXiv:2402.09353).
+- Exact-time scheduler (Goyal scaling).
+- Torch.compile (`reduce-overhead`) by default.
+- Safe HF upload with `merge_and_unload` + safe serialization.
+- Dynamic VRAM-aware batch/accum/LR scaling (16/24/40 GB tiers).
+- Optional MT-Bench run via `lm-eval`.
+- Optional Accelerate/DeepSpeed passthrough.
+
+## CLI flags (new/important)
+- `--use_dora` : force DoRA on; default is on for balanced/best, off for fast.
+- `--mt-bench` : run MT-Bench via lm-eval after training (slow; requires `lm-eval` installed).
+- `--accelerate-config` : path to an Accelerate config to enable multi-GPU/DeepSpeed.
+- `--deepspeed` : path to a DeepSpeed config JSON (passed through TRL/Transformers).
+- `--push-to-hub <repo>` : auto-upload; performs merge_and_unload when available, safe serialization.
+
+## Behavior notes
+- VRAM scaling: batch/accum and LR are adjusted by detected VRAM (≈1.5× for 16 GB, 2× for 24 GB, 4× for 40 GB; capped to keep stability).
+- Callbacks are registered after trainer construction to avoid scope errors.
+- Upload path uses merge_and_unload when supported; tokenizer is always pushed.
+
+## Testing
+Light sanity tests live in `tests/`:
+```bash
+pytest tests/test_cli.py
+```
+(Integration/MT-Bench and heavy speed benchmarks are optional and not run in CI.)
+
+## Benchmark script
+`run_all_tests.sh` runs syntax/import checks, unit tests, projector SVD smoke, a 1-minute fine-tune, and a speed check.
+
+## Quick reference
+- `UzombieProjector`: `src/uzombie/core/hybrid_projector.py`
+- CLI entry: `src/uzombie/cli.py`
+- Safe upload: `src/uzombie/utils/upload.py`
