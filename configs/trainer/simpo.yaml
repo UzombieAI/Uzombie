@@ -1,0 +1,17 @@
+output_dir: "./uzombie_simpo_output"
+# SimPO specific
+loss_type: "simpo"  # Options: simpo, rpo, mmpo
+cpo_alpha: 0.0      # 0 for SimPO
+simpo_gamma: 1.4    # Target margin
+beta: 2.0           # Higher beta for SimPO
+# Training
+learning_rate: 5.0e-7
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 16
+optim: "adamw_8bit"
+warmup_ratio: 0.1
+use_liger_kernel: true
+bf16: true
+logging_steps: 10
+max_prompt_length: 1024
+max_length: 2048

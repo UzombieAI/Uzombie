@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+
+# Unsloth/Unzombie caches
+unsloth_compiled_cache/
+
+# Generated data/models
+magpie_v2_dataset/
+test_cli_integration/
+uzombie_outputs/
+*.arrow
+*.bin
+*.safetensors
+
+# Environments
+.env
+.venv
+env/
+
+# Misc
+.DS_Store
+Thumbs.db

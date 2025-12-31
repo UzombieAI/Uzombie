@@ -1,0 +1,12 @@
+model_name: "unsloth/Meta-Llama-3.1-8B-Instruct"
+max_seq_length: 8192
+load_in_4bit: true
+dtype: null  # Auto-detect (bf16 on Ampere)
+# Target modules for Llama-3 (Unsloth default targets)
+target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+r: 64
+lora_alpha: 64
+use_dora: true
+use_gradient_checkpointing: "unsloth"
+random_state: 3407
+advanced_init: true  # Enables arXiv 2510.03731 scaling

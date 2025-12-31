@@ -1,0 +1,8 @@
+teacher_model: "meta-llama/Meta-Llama-3.1-70B-Instruct"
+num_samples: 5000
+# Magpie template for Llama-3
+template: "<|start_header_id|>user<|end_header_id|>"
+cot_prompt: "Solve the following problem step-by-step:\n{query}\n<|start_header_id|>assistant<|end_header_id|>\n<thinking>"
+active_iterations: 2
+importance_threshold: 0.7
+repo_id: "UzombieAI/magpie-reasoning-v1"

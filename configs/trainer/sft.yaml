@@ -1,0 +1,18 @@
+output_dir: "./uzombie_sft_output"
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 8
+learning_rate: 2.0e-4
+warmup_ratio: 0.1
+optim: "adamw_8bit"
+weight_decay: 0.01
+lr_scheduler_type: "linear"
+seed: 3407
+logging_steps: 10
+# Liger Kernel (Fused CrossEntropy/RMSNorm)
+use_liger_kernel: true
+bf16: true
+fp16: false
+# Dataset specific
+dataset_text_field: "text"
+max_seq_length: 8192
+packing: true  # Unsloth packing
